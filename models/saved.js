@@ -11,6 +11,18 @@ var SavedSchema = new Schema({
     type: String,
     required: true
   },
+  link: {
+    type: String,
+    required: true
+  },
+  note: {
+    type: Schema.Types.ObjectId,
+    ref: "Comment"
+  },
+  article: {
+    type: Schema.Types.ObjectId,
+    ref: "Article"
+  }
   // `link` is required and of type String
   // link: {
   //   type: String,
