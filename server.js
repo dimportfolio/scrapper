@@ -18,7 +18,7 @@ var cheerio = require("cheerio");
 // Require all models
 var db = require("./models");
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 // Configure middleware
 
@@ -29,13 +29,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
-
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scrapperProject";
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/scrapperProject", { useNewUrlParser: true });
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
 app.get("/", function(req,res) {
-    res.render("index")
+    db.Article.find()  // get all articles
+    .then( function(dbArticle) {
+      res.render("index", {data: dbArticle })
+    })
 })
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
@@ -134,6 +137,7 @@ app.get("/saved", function(req, res) {
       .then(function(dbSaved) {
         // If we were able to successfully find Articles, send them back to the client
         res.json(dbSaved);
+        res.render("index", {data: dbSaved })
       })
       .catch(function(err) {
         // If an error occurred, send it to the client

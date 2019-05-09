@@ -4,6 +4,9 @@ $("#scrape").on("click", function(){
         method: "GET",
         url: "/scrape"
     })
+    .then(function(data) {
+      location.replace("/");    // go to home page  (index.handlebars)
+    })
 })
 $("#home").on("click", function() {
 $.getJSON("/articles", function(data) {
@@ -22,6 +25,13 @@ $.getJSON("/articles", function(data) {
 })
 
 $("#save").on("click", function() {
+    $.ajax({
+        method: "GET",
+        url: "/saved"
+    })
+    .then(function(data) {
+      location.replace("/saved");    // go to home page  (index.handlebars)
+    })
     $("#articles").empty();
     $("#notes").empty();
     $.getJSON("/saved", function(data) {
